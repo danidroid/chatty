@@ -6,6 +6,18 @@ A ChatGPT demo API
 
 This demo was created to be used in the Flutter Faro event #3
 
+### Features
+
+[x] Base app structure
+[x] Connect to Api to query text or images
+[x] Simple Chat UI
+[ ] Proper error handling
+[ ] Improve and clean Models structure
+[ ] Improve chat UI for text and image prompts
+[ ] Add support to save conversation
+[ ] Add Settings to configure the SecretKey
+[ ] Add tests
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.
