@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 
 import 'presentation/ui/home.dart';
 
+// ignore_for_file: non_constant_identifier_names
+import 'env/env.dart';
+
+
 void main() {
-  /// Set your token api account
-  ApiService.api.token = "";
+  
+  // Set the OpenAI API key from the .env file.
+  ApiService.api.token = Env.apiKey;
 
   runApp(const MyApp());
 }
