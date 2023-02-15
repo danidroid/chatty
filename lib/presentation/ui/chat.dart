@@ -1,9 +1,13 @@
+import 'dart:convert';
+
 import 'package:chatty/data/app_repository.dart';
-import 'package:chatty/data/models/completation_response_model.dart';
 import 'package:chatty/domain/entities/message.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
+/// TODO:
+/// Better handle what to query, Text or Image
+/// or event both?
 class ChatView extends StatefulWidget {
   const ChatView({Key? key}) : super(key: key);
 
@@ -75,7 +79,10 @@ class _ChatViewState extends State<ChatView> {
       _messages.add(Message.loading());
     });
 
-    var response = await appRepository.request(prompt: prompt);
+    /// Request Text
+    //var response = await appRepository.request(prompt: prompt);
+    /// Request Image
+    var response = await appRepository.requestImage(prompt: prompt);
 
     setState(() {
       _messages
@@ -141,7 +148,15 @@ class MessageBubble extends StatelessWidget {
                   radius: 10,
                 ),
               ],
-              Text(item.message),
+              if (item.image != null) ...[
+                Image.memory(
+                  const Base64Decoder().convert(item.message.split(',').last),
+                  gaplessPlayback: true,
+                )
+              ],
+              if (item.model != null || item.me) ...[
+                Text(item.message),
+              ]
             ],
           ),
         ),
