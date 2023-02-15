@@ -6,7 +6,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.0.2+2
 
 environment:
-  sdk: '>=2.18.6 <3.0.0'
+  sdk: '>=2.19.2 <3.0.0'
 
 dependencies:
   flutter:
@@ -16,6 +16,10 @@ dependencies:
 
   dio: ^4.0.6
   jumping_dot: ^0.0.4
+
+  whisper_dart: ^0.0.8
+  file_picker: ^5.2.5
+  cool_alert: ^1.1.0
 
 dev_dependencies:
   flutter_test:

@@ -1,0 +1,7 @@
+# ninja log v5
+0	477	1676488660	CMakeFiles/ggml.dir/whisper.cpp/ggml.c.o	a35f4d79057f87ef
+478	536	1676488660	libggml.a	109a607e3d048b3f
+0	3155	1676488662	CMakeFiles/whisper.dir/main.cpp.o	39079d2763ddba0
+0	3811	1676488663	CMakeFiles/whisper_lib.dir/whisper.cpp/whisper.cpp.o	3cc17344cff703b2
+3811	3873	1676488663	libwhisper_lib.a	8cd7c22b12d04a40
+3873	4062	1676488663	/Users/danieljorge/Dengun/Mobile/workspace/chatty/build/app/intermediates/cxx/Debug/1fw1i2p5/obj/armeabi-v7a/libwhisper.so	fd415850f18e2759

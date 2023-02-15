@@ -1,0 +1,17 @@
+[
+{
+  "directory": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86",
+  "command": "/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang --target=i686-none-linux-android19 --sysroot=/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security  -fPIC -fno-limit-debug-info  -fPIC -o CMakeFiles/ggml.dir/whisper.cpp/ggml.c.o -c /Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/whisper.cpp/ggml.c",
+  "file": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/whisper.cpp/ggml.c"
+},
+{
+  "directory": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86",
+  "command": "/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=i686-none-linux-android19 --sysroot=/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fPIC -fno-limit-debug-info  -fPIC -std=gnu++20 -o CMakeFiles/whisper_lib.dir/whisper.cpp/whisper.cpp.o -c /Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/whisper.cpp/whisper.cpp",
+  "file": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/whisper.cpp/whisper.cpp"
+},
+{
+  "directory": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86",
+  "command": "/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++ --target=i686-none-linux-android19 --sysroot=/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/sysroot -DDART_SHARED_LIB -Dwhisper_EXPORTS -g -DANDROID -fdata-sections -ffunction-sections -funwind-tables -fstack-protector-strong -no-canonical-prefixes -mstackrealign -D_FORTIFY_SOURCE=2 -Wformat -Werror=format-security   -fPIC -fno-limit-debug-info  -fPIC -std=gnu++20 -o CMakeFiles/whisper.dir/main.cpp.o -c /Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/main.cpp",
+  "file": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/main.cpp"
+}
+]

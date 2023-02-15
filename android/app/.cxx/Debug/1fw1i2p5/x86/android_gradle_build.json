@@ -1,0 +1,52 @@
+{
+  "buildFiles": [
+    "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/src/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/Users/danieljorge/Dengun/Mobile/sdks/android/cmake/3.18.1/bin/ninja",
+      "-C",
+      "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/Users/danieljorge/Dengun/Mobile/sdks/android/cmake/3.18.1/bin/ninja",
+    "-C",
+    "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "ggml::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "ggml",
+      "output": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86/libggml.a"
+    },
+    "whisper::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "whisper",
+      "output": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/build/app/intermediates/cxx/Debug/1fw1i2p5/obj/x86/libwhisper.so",
+      "runtimeFiles": []
+    },
+    "whisper_lib::@6890427a1f51a3e7e1df": {
+      "toolchain": "toolchain",
+      "abi": "x86",
+      "artifactName": "whisper_lib",
+      "output": "/Users/danieljorge/Dengun/Mobile/workspace/chatty/android/app/.cxx/Debug/1fw1i2p5/x86/libwhisper_lib.a"
+    }
+  },
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [
+    "c"
+  ],
+  "cppFileExtensions": [
+    "cpp"
+  ]
+}

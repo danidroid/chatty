@@ -42,3 +42,7 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+/whisper_dart
+/android/libwhisper.so
+/android/src/build

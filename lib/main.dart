@@ -1,13 +1,23 @@
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:chatty/data/api_service.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'presentation/ui/home.dart';
+import 'presentation/ui/whisper.dart';
 
-void main() {
+void main() async {
   /// Set your token api account
   ApiService.api.token = "";
 
-  runApp(const MyApp());
+  /// For Whisper
+  WidgetsFlutterBinding.ensureInitialized();
+  DynamicLibrary.open('libwhisper.so');
+
+  //runApp(const MyApp());
+  runApp(const MyAppWhisper());
 }
 
 class MyApp extends StatelessWidget {
