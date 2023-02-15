@@ -39,5 +39,6 @@ samples, guidance on mobile development, and a full API reference.
 
  1. Create an account and generate a new Secret Key
     1. - [Create a Key](https://platform.openai.com/account/api-keys)
- 2. Paste the Key into the 'main.dart' file and set it in 'ApiService.api.token'
- 3. Compile and run it 
+ 2. Paste the Key into the '.env' file and set OPEN_AI_API_KEY=<API_KEY>
+ 3. run: flutter pub run build_runner build
+ 4. Compile and run it 
