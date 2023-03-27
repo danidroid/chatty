@@ -65,7 +65,7 @@ class _ChatViewState extends State<ChatView> {
                   ),
                   AudioRecorder(
                     onStop: (path) {
-                      if (kDebugMode) print('Recorded file path: $path');
+                      debugPrint('Recorded file path: $path');
                       setState(() {
                         audioPath = path;
                       });

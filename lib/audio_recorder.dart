@@ -35,15 +35,16 @@ class _AudioRecorderState extends State<AudioRecorder> {
   }
 
   Future<void> _start() async {
+    
+    debugPrint("_start");
+
     try {
       if (await _audioRecorder.hasPermission()) {
         // We don't do anything with this but printing
         final isSupported = await _audioRecorder.isEncoderSupported(
           AudioEncoder.aacLc,
         );
-        if (kDebugMode) {
-          print('${AudioEncoder.aacLc.name} supported: $isSupported');
-        }
+        debugPrint('${AudioEncoder.aacLc.name} supported: $isSupported');
 
         // final devs = await _audioRecorder.listInputDevices();
         // final isRecording = await _audioRecorder.isRecording();
@@ -54,9 +55,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
         _startTimer();
       }
     } catch (e) {
-      if (kDebugMode) {
-        print(e);
-      }
+      debugPrint("Exception: $e");
     }
   }
 
@@ -71,15 +70,15 @@ class _AudioRecorderState extends State<AudioRecorder> {
     }
   }
 
-  Future<void> _pause() async {
-    _timer?.cancel();
-    await _audioRecorder.pause();
-  }
+  // Future<void> _pause() async {
+  //   _timer?.cancel();
+  //   await _audioRecorder.pause();
+  // }
 
-  Future<void> _resume() async {
-    _startTimer();
-    await _audioRecorder.resume();
-  }
+  // Future<void> _resume() async {
+  //   _startTimer();
+  //   await _audioRecorder.resume();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -109,74 +108,72 @@ class _AudioRecorderState extends State<AudioRecorder> {
     }
 
     return ClipOval(
-      child: Material(
-        color: color,
-        child: InkWell(
+      child: InkWell(
           child: SizedBox(width: 56, height: 56, child: icon),
           onTap: () {
+            debugPrint("Record button tap: $_recordState");
             (_recordState != RecordState.stop) ? _stop() : _start();
           },
-        ),
-      ),
+        )
     );
   }
 
-  Widget _buildPauseResumeControl() {
-    if (_recordState == RecordState.stop) {
-      return const SizedBox.shrink();
-    }
+  // Widget _buildPauseResumeControl() {
+  //   if (_recordState == RecordState.stop) {
+  //     return const SizedBox.shrink();
+  //   }
 
-    late Icon icon;
-    late Color color;
+  //   late Icon icon;
+  //   late Color color;
 
-    if (_recordState == RecordState.record) {
-      icon = const Icon(Icons.pause, color: Colors.red, size: 30);
-      color = Colors.red.withOpacity(0.1);
-    } else {
-      final theme = Theme.of(context);
-      icon = const Icon(Icons.play_arrow, color: Colors.red, size: 30);
-      color = theme.primaryColor.withOpacity(0.1);
-    }
+  //   if (_recordState == RecordState.record) {
+  //     icon = const Icon(Icons.pause, color: Colors.red, size: 30);
+  //     color = Colors.red.withOpacity(0.1);
+  //   } else {
+  //     final theme = Theme.of(context);
+  //     icon = const Icon(Icons.play_arrow, color: Colors.red, size: 30);
+  //     color = theme.primaryColor.withOpacity(0.1);
+  //   }
 
-    return ClipOval(
-      child: Material(
-        color: color,
-        child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
-          onTap: () {
-            (_recordState == RecordState.pause) ? _resume() : _pause();
-          },
-        ),
-      ),
-    );
-  }
+  //   return ClipOval(
+  //     child: Material(
+  //       color: color,
+  //       child: InkWell(
+  //         child: SizedBox(width: 56, height: 56, child: icon),
+  //         onTap: () {
+  //           (_recordState == RecordState.pause) ? _resume() : _pause();
+  //         },
+  //       ),
+  //     ),
+  //   );
+  // }
 
-  Widget _buildText() {
-    if (_recordState != RecordState.stop) {
-      return _buildTimer();
-    }
+  // Widget _buildText() {
+  //   if (_recordState != RecordState.stop) {
+  //     return _buildTimer();
+  //   }
 
-    return const Text("Waiting to record");
-  }
+  //   return const Text("Waiting to record");
+  // }
 
-  Widget _buildTimer() {
-    final String minutes = _formatNumber(_recordDuration ~/ 60);
-    final String seconds = _formatNumber(_recordDuration % 60);
+  // Widget _buildTimer() {
+  //   final String minutes = _formatNumber(_recordDuration ~/ 60);
+  //   final String seconds = _formatNumber(_recordDuration % 60);
 
-    return Text(
-      '$minutes : $seconds',
-      style: const TextStyle(color: Colors.red),
-    );
-  }
+  //   return Text(
+  //     '$minutes : $seconds',
+  //     style: const TextStyle(color: Colors.red),
+  //   );
+  // }
 
-  String _formatNumber(int number) {
-    String numberStr = number.toString();
-    if (number < 10) {
-      numberStr = '0$numberStr';
-    }
+  // String _formatNumber(int number) {
+  //   String numberStr = number.toString();
+  //   if (number < 10) {
+  //     numberStr = '0$numberStr';
+  //   }
 
-    return numberStr;
-  }
+  //   return numberStr;
+  // }
 
   void _startTimer() {
     _timer?.cancel();
