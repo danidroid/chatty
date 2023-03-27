@@ -1,0 +1,2 @@
+/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ar qc libwhisper_lib.a CMakeFiles/whisper_lib.dir/whisper.cpp/whisper.cpp.o
+/Users/danieljorge/Dengun/Mobile/sdks/android/ndk/25.2.9519653/toolchains/llvm/prebuilt/darwin-x86_64/bin/llvm-ranlib libwhisper_lib.a

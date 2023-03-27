@@ -11,14 +11,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  void _openChat() async {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (BuildContext context) => const ChatView(),
-        ));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,19 +20,6 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
-          /*const SizedBox(height: 16,),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              const Text(
-                'Available Tokens:',
-              ),
-              Text(
-                '$_counter',
-                style: Theme.of(context).textTheme.headline4,
-              ),
-            ],
-          ),*/
           const SizedBox(
             height: 16,
           ),
@@ -52,5 +31,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: const Icon(Icons.message),
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
+  }
+
+  void _openChat() async {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (BuildContext context) => const ChatView(),
+        ));
   }
 }

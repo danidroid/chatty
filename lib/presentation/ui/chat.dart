@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:chatty/data/app_repository.dart';
 import 'package:chatty/domain/entities/message.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:jumping_dot/jumping_dot.dart';
 
@@ -25,6 +27,7 @@ class _ChatViewState extends State<ChatView> {
 
   bool isLoading = false;
   final List<Message> _messages = [];
+  final List<String> _messages2 = [];
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +46,13 @@ class _ChatViewState extends State<ChatView> {
                     Message item = _messages.elementAt(index);
 
                     return MessageBubble(item: item);
+
+                    /*String item = _messages2.elementAt(index);
+
+                    return Container(
+                      color: Colors.blue,
+                      child: Text(item),
+                    );*/
                   })),
           Container(
             color: Colors.amber,
@@ -108,6 +118,36 @@ class _ChatViewState extends State<ChatView> {
         duration: const Duration(milliseconds: 500),
       );
     }
+  }
+
+  void request2(String prompt) async {
+    Dio client = Dio();
+    client.options.baseUrl = "https://api.openai.com/v1/";
+
+    String token = "";
+
+    final headers = <String, Object>{};
+    headers[HttpHeaders.authorizationHeader] = "Bearer $token";
+    headers[HttpHeaders.acceptHeader] = 'application/json';
+    headers[HttpHeaders.contentTypeHeader] = 'application/json';
+
+    client.options.headers.addAll(headers);
+
+    var response = await client.post("completions", data: {
+      "model": "text-davinci-003",
+      "prompt": prompt,
+      "max_tokens": 1500,
+      "stop": ["You:"]
+    });
+    print("response: $response");
+
+    var json = response.data as Map<String, dynamic>;
+    var message = json["choices"][0]["text"];
+    print("message: $message");
+
+    setState(() {
+      _messages2.add(message);
+    });
   }
 }
 

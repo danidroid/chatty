@@ -1,0 +1,5 @@
+/Users/danieljorge/Dengun/Mobile/workspace/chatty/whisper_dart/native_lib/build/CMakeFiles/whisper.dir
+/Users/danieljorge/Dengun/Mobile/workspace/chatty/whisper_dart/native_lib/build/CMakeFiles/whisper_lib.dir
+/Users/danieljorge/Dengun/Mobile/workspace/chatty/whisper_dart/native_lib/build/CMakeFiles/ggml.dir
+/Users/danieljorge/Dengun/Mobile/workspace/chatty/whisper_dart/native_lib/build/CMakeFiles/edit_cache.dir
+/Users/danieljorge/Dengun/Mobile/workspace/chatty/whisper_dart/native_lib/build/CMakeFiles/rebuild_cache.dir
