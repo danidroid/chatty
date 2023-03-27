@@ -6,14 +6,13 @@ class CompletationResponseModel {
   List<Choices>? choices;
   Usage? usage;
 
-  CompletationResponseModel({
-    this.id,
-    this.object,
-    this.created,
-    this.model,
-    this.choices,
-    this.usage
-  });
+  CompletationResponseModel(
+      {this.id,
+      this.object,
+      this.created,
+      this.model,
+      this.choices,
+      this.usage});
 
   CompletationResponseModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

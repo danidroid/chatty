@@ -16,14 +16,19 @@ dependencies:
 
   dio: ^4.0.6
   jumping_dot: ^0.0.4
-  envied: ^0.3.0
+
+  path_provider: ^2.0.13
+  provider: ^6.0.5
+
+  #whisper_dart: ^0.0.11
+  #envied: ^0.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
   flutter_lints: ^2.0.0
-  envied_generator: ^0.3.0
+  #envied_generator: ^0.3.0
   build_runner: ^2.3.3
 
 # For information on the generic Dart part of this file, see the
@@ -33,6 +38,9 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+
+  assets:
+    - "assets/audio/sample_0.mp3"
 
   # To add assets to your application, add an assets section, like this:
   # assets:
