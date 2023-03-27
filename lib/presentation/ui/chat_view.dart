@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:chatty/audio_recorder.dart';
 
 import '../notifiers/timer_notifier.dart';
 
@@ -18,6 +19,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   late final _timer = context.read<TimerNotifier>();
+  String? audioPath;
 
   final List<String> _messages = [];
 
@@ -42,8 +44,9 @@ class _ChatViewState extends State<ChatView> {
               child: Row(
                 children: [
                   IconButton(
-                      onPressed: _onStart,
-                      icon: const Icon(Icons.schedule_rounded)),
+                    onPressed: _onStart,
+                    icon: const Icon(Icons.schedule_rounded)
+                  ),
                   Consumer<TimerNotifier>(builder: (context, nf, child) {
                     if (!nf.isRunning) {
                       return const Text(
@@ -57,8 +60,17 @@ class _ChatViewState extends State<ChatView> {
                     );
                   }),
                   IconButton(
-                      onPressed: _onAudioTranscriptions,
-                      icon: const Icon(Icons.audio_file_outlined)),
+                    onPressed: _onAudioTranscriptions,
+                    icon: const Icon(Icons.audio_file_outlined)
+                  ),
+                  AudioRecorder(
+                    onStop: (path) {
+                      if (kDebugMode) print('Recorded file path: $path');
+                      setState(() {
+                        audioPath = path;
+                      });
+                    },
+                  )
                 ],
               ),
             ),
