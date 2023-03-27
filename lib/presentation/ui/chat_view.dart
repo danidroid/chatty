@@ -119,7 +119,7 @@ class _ChatViewState extends State<ChatView> {
                         ),
                       ),
                       onFieldSubmitted: (value) {
-                        print("Value: $value");
+                        debugPrint("Value: $value");
                         request(prompt: value);
                       }),
                 ))
@@ -174,7 +174,7 @@ class _ChatViewState extends State<ChatView> {
     });
     var response = await client.post("audio/transcriptions", data: formData);
 
-    print("response: $response");
+    debugPrint("response: $response");
 
     var json = response.data as Map<String, dynamic>;
     //var message = json["choices"][0]["text"];
