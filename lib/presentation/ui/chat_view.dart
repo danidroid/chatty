@@ -1,11 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-
+import 'package:flutter/foundation.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:chatty/audio_recorder.dart';
+
+import 'package:chatty/env/env.dart';
 
 import '../notifiers/timer_notifier.dart';
 
@@ -18,6 +21,7 @@ class ChatView extends StatefulWidget {
 
 class _ChatViewState extends State<ChatView> {
   late final _timer = context.read<TimerNotifier>();
+  String? audioPath;
 
   final List<String> _messages = [];
 
@@ -42,8 +46,9 @@ class _ChatViewState extends State<ChatView> {
               child: Row(
                 children: [
                   IconButton(
-                      onPressed: _onStart,
-                      icon: const Icon(Icons.schedule_rounded)),
+                    onPressed: _onStart,
+                    icon: const Icon(Icons.schedule_rounded)
+                  ),
                   Consumer<TimerNotifier>(builder: (context, nf, child) {
                     if (!nf.isRunning) {
                       return const Text(
@@ -57,8 +62,17 @@ class _ChatViewState extends State<ChatView> {
                     );
                   }),
                   IconButton(
-                      onPressed: _onAudioTranscriptions,
-                      icon: const Icon(Icons.audio_file_outlined)),
+                    onPressed: _onAudioTranscriptions,
+                    icon: const Icon(Icons.audio_file_outlined)
+                  ),
+                  AudioRecorder(
+                    onStop: (path) {
+                      debugPrint('Recorded file path: $path');
+                      setState(() {
+                        audioPath = path;
+                      });
+                    },
+                  )
                 ],
               ),
             ),
@@ -107,7 +121,7 @@ class _ChatViewState extends State<ChatView> {
                         ),
                       ),
                       onFieldSubmitted: (value) {
-                        print("Value: $value");
+                        debugPrint("Value: $value");
                         request(prompt: value);
                       }),
                 ))
@@ -122,7 +136,7 @@ class _ChatViewState extends State<ChatView> {
     client.options.baseUrl = "https://api.openai.com/v1/";
 
     /// Set API token
-    String token = "";
+    String token = Env.apiKey;
 
     final headers = <String, Object>{};
     headers[HttpHeaders.authorizationHeader] = "Bearer $token";
@@ -131,6 +145,8 @@ class _ChatViewState extends State<ChatView> {
     headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
 
     client.options.headers.addAll(headers);
+
+    debugPrint(client.options.headers.toString());
 
     /*var response = await client.post("completions", data: {
       "model": "text-davinci-003",
@@ -144,13 +160,13 @@ class _ChatViewState extends State<ChatView> {
       "response_format": "b64_json"
     });*/
 
-    ByteData a = await rootBundle.load("assets/audio/sample_0.mp3");
+    // ByteData a = await rootBundle.load("/tmp/file.m4a");
     //Uint8List audioUint8List = a.buffer.asUint8List(a.offsetInBytes, a.lengthInBytes);
     //List<int> audioListInt = audioUint8List.cast<int>();
 
     File? file;
     try {
-      file = await writeToFile(a); // <= returns File
+      file = File.fromUri(Uri.file("/tmp/file.m4a")); // <= returns File
     } catch (e) {
       // catch errors here
     }
@@ -162,7 +178,7 @@ class _ChatViewState extends State<ChatView> {
     });
     var response = await client.post("audio/transcriptions", data: formData);
 
-    print("response: $response");
+    debugPrint("response: $response");
 
     var json = response.data as Map<String, dynamic>;
     //var message = json["choices"][0]["text"];

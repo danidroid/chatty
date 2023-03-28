@@ -26,7 +26,7 @@ class TimerNotifier extends ChangeNotifier {
   }
 
   void onTime(Timer t) {
-    print("onTime: ${t.tick}");
+    debugPrint("onTime: ${t.tick}");
 
     duration = t.tick.toString();
 

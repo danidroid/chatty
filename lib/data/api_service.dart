@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class ApiService {
   static const String _tag = '.APIService';
@@ -56,7 +57,7 @@ class ApiService {
 
       _client.options.headers.addAll(builtHeaders);
 
-      print(_client.options.headers);
+      debugPrint("API SERVICE POST (HEADERS): ${_client.options.headers}");
 
       final response = await _client.post(
         _queryBuilder(url, query),

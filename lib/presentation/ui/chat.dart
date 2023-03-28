@@ -139,11 +139,11 @@ class _ChatViewState extends State<ChatView> {
       "max_tokens": 1500,
       "stop": ["You:"]
     });
-    print("response: $response");
+    debugPrint("response: $response");
 
     var json = response.data as Map<String, dynamic>;
     var message = json["choices"][0]["text"];
-    print("message: $message");
+    debugPrint("message: $message");
 
     setState(() {
       _messages2.add(message);

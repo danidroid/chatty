@@ -15,7 +15,8 @@ class AppRepository {
       "max_tokens": 1500,
       "stop": ["You:"]
     });
-    print("response $response");
+
+    debugPrint("response $response");
 
     var result = CompletationResponseModel.fromJson(response);
 
