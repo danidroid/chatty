@@ -217,7 +217,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   /// for whisper
-  void requestAudio({required String prompt, bool? getResponse}) async {
+  void requestAudio({required String prompt, bool getResponse = false}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
