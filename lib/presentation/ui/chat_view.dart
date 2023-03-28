@@ -297,6 +297,7 @@ class _ChatViewState extends State<ChatView> {
       await flutterTts.setPitch(0.8);
       await flutterTts.speak(message);
       setState(() {
+        _messages.add("You said: $text");
         _messages.add(message);
       });
     } else {
