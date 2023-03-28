@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_tts/flutter_tts.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
@@ -133,7 +134,7 @@ class _ChatViewState extends State<ChatView> {
                             audioPath = path;
                           });
 
-                          requestAudio(prompt: audioPath!);
+                          requestAudio(prompt: audioPath!, getResponse: true);
                         },
                       )
                     ],
@@ -145,7 +146,7 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  void requestText({required String prompt}) async {
+  Future<String> requestText({required String prompt}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
@@ -183,6 +184,8 @@ class _ChatViewState extends State<ChatView> {
     setState(() {
       _messages.add(message);
     });
+
+    return message;
   }
 
   void requestImage({required String prompt}) async {
@@ -214,7 +217,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   /// for whisper
-  void requestAudio({required String prompt}) async {
+  void requestAudio({required String prompt, bool getResponse = false}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
@@ -256,14 +259,28 @@ class _ChatViewState extends State<ChatView> {
         FormData.fromMap({"model": "whisper-1", "file": multipartFile});
     var response = await client.post("audio/transcriptions", data: formData);
 
-    debugPrint("response: $response");
+    debugPrint("whisper parse: $response");
 
     var json = response.data as Map<String, dynamic>;
     final String text = json["text"];
 
-    setState(() {
-      _messages.add(text);
-    });
+    // Flutter tts
+
+    var s = await requestText(prompt: text);
+
+    if (getResponse) {
+      FlutterTts flutterTts = FlutterTts();
+      await flutterTts.setLanguage("en-GB");
+      await flutterTts.setPitch(0.8);
+      await flutterTts.speak(s);
+      setState(() {
+        _messages.add(s);
+      });
+    } else {
+      setState(() {
+        _messages.add(text);
+      });
+    }
   }
 
   void _onStart() {
