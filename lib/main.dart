@@ -6,13 +6,11 @@ import 'presentation/notifiers/timer_notifier.dart';
 import 'presentation/ui/chat_view.dart';
 import 'presentation/ui/home.dart';
 
-// ignore_for_file: non_constant_identifier_names
 import 'env/env.dart';
 
-void main() {
+void main() { 
   // Set the OpenAI API key from the .env file.
-  ApiService.api.token = "";
-
+  ApiService.api.token = Env.apiKey;
   runApp(const MyApp());
 }
 

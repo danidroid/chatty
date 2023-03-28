@@ -8,6 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:chatty/audio_recorder.dart';
 
+import 'package:chatty/env/env.dart';
+
 import '../notifiers/timer_notifier.dart';
 
 class ChatView extends StatefulWidget {
@@ -134,7 +136,7 @@ class _ChatViewState extends State<ChatView> {
     client.options.baseUrl = "https://api.openai.com/v1/";
 
     /// Set API token
-    String token = "";
+    String token = Env.apiKey;
 
     final headers = <String, Object>{};
     headers[HttpHeaders.authorizationHeader] = "Bearer $token";
@@ -143,6 +145,8 @@ class _ChatViewState extends State<ChatView> {
     headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
 
     client.options.headers.addAll(headers);
+
+    debugPrint(client.options.headers.toString());
 
     /*var response = await client.post("completions", data: {
       "model": "text-davinci-003",
