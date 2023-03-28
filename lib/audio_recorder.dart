@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:record/record.dart';
 
 class AudioRecorder extends StatefulWidget {
@@ -49,7 +50,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
         // final devs = await _audioRecorder.listInputDevices();
         // final isRecording = await _audioRecorder.isRecording();
 
-        await _audioRecorder.start();
+        await _audioRecorder.start(path: "/tmp/file.m4a");
         _recordDuration = 0;
 
         _startTimer();

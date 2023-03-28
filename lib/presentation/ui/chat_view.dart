@@ -156,13 +156,13 @@ class _ChatViewState extends State<ChatView> {
       "response_format": "b64_json"
     });*/
 
-    ByteData a = await rootBundle.load("assets/audio/sample_0.mp3");
+    // ByteData a = await rootBundle.load("/tmp/file.m4a");
     //Uint8List audioUint8List = a.buffer.asUint8List(a.offsetInBytes, a.lengthInBytes);
     //List<int> audioListInt = audioUint8List.cast<int>();
 
     File? file;
     try {
-      file = await writeToFile(a); // <= returns File
+      file = File.fromUri(Uri.file("/tmp/file.m4a")); // <= returns File
     } catch (e) {
       // catch errors here
     }
