@@ -146,7 +146,7 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  void requestText({required String prompt}) async {
+  Future<String> requestText({required String prompt}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
@@ -184,6 +184,8 @@ class _ChatViewState extends State<ChatView> {
     setState(() {
       _messages.add(message);
     });
+
+    return message;
   }
 
   void requestImage({required String prompt}) async {
@@ -264,41 +266,15 @@ class _ChatViewState extends State<ChatView> {
 
     // Flutter tts
 
-    if (getResponse == true) {
-      Dio client = Dio();
-      client.options.baseUrl = "https://api.openai.com/v1/";
+    var s = await requestText(prompt: text);
 
-      /// Set API token
-      String token = Env.apiKey;
-
-      final headers = <String, Object>{};
-      headers[HttpHeaders.authorizationHeader] = "Bearer $token";
-      headers[HttpHeaders.acceptHeader] = 'application/json';
-      headers[HttpHeaders.contentTypeHeader] = 'application/json';
-
-      client.options.headers.addAll(headers);
-
-      debugPrint(client.options.headers.toString());
-
-      var response = await client.post("completions", data: {
-        "model": "text-davinci-003",
-        "prompt": text,
-        "max_tokens": 1500,
-        "stop": ["You:"]
-      });
-
-      debugPrint("response: $response");
-
-      var json = response.data as Map<String, dynamic>;
-      var message = json["choices"][0]["text"];
-
+    if (getResponse!) {
       FlutterTts flutterTts = FlutterTts();
       await flutterTts.setLanguage("en-GB");
       await flutterTts.setPitch(0.8);
-      await flutterTts.speak(message);
+      await flutterTts.speak(s);
       setState(() {
-        _messages.add("You said: $text");
-        _messages.add(message);
+        _messages.add(s);
       });
     } else {
       setState(() {
