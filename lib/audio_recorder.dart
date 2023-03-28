@@ -1,7 +1,6 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:record/record.dart';
 
 class AudioRecorder extends StatefulWidget {
@@ -10,9 +9,10 @@ class AudioRecorder extends StatefulWidget {
   const AudioRecorder({Key? key, required this.onStop}) : super(key: key);
 
   @override
-  State<AudioRecorder> createState() => _AudioRecorderState();
+  State<AudioRecorder> createState() => _SimpleAudioRecorderState();
 }
 
+/// Complete [_AudioRecorderState]
 class _AudioRecorderState extends State<AudioRecorder> {
   int _recordDuration = 0;
   Timer? _timer;
@@ -24,6 +24,7 @@ class _AudioRecorderState extends State<AudioRecorder> {
 
   @override
   void initState() {
+    super.initState();
     _recordSub = _audioRecorder.onStateChanged().listen((recordState) {
       setState(() => _recordState = recordState);
     });
@@ -31,12 +32,9 @@ class _AudioRecorderState extends State<AudioRecorder> {
     _amplitudeSub = _audioRecorder
         .onAmplitudeChanged(const Duration(milliseconds: 300))
         .listen((amp) => setState(() => _amplitude = amp));
-
-    super.initState();
   }
 
   Future<void> _start() async {
-    
     debugPrint("_start");
 
     try {
@@ -109,14 +107,13 @@ class _AudioRecorderState extends State<AudioRecorder> {
     }
 
     return ClipOval(
-      child: InkWell(
-          child: SizedBox(width: 56, height: 56, child: icon),
-          onTap: () {
-            debugPrint("Record button tap: $_recordState");
-            (_recordState != RecordState.stop) ? _stop() : _start();
-          },
-        )
-    );
+        child: InkWell(
+      child: SizedBox(width: 56, height: 56, child: icon),
+      onTap: () {
+        debugPrint("Record button tap: $_recordState");
+        (_recordState != RecordState.stop) ? _stop() : _start();
+      },
+    ));
   }
 
   // Widget _buildPauseResumeControl() {
@@ -182,5 +179,64 @@ class _AudioRecorderState extends State<AudioRecorder> {
     _timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
       setState(() => _recordDuration++);
     });
+  }
+}
+
+/// Alternative simple version [_SimpleAudioRecorderState]
+/// for demo purpose for event #4
+class _SimpleAudioRecorderState extends State<AudioRecorder> {
+  final _audioRecorder = Record();
+
+  bool isRecording = false;
+
+  Future<void> _start() async {
+    debugPrint("_start");
+    try {
+      if (await _audioRecorder.hasPermission()) {
+        setState(() {
+          isRecording = true;
+        });
+        await _audioRecorder.start(path: "/tmp/file.m4a");
+      }
+    } catch (e) {
+      debugPrint("Exception: $e");
+    }
+
+    isRecording = await _audioRecorder.isRecording();
+  }
+
+  Future<void> _stop() async {
+    final path = await _audioRecorder.stop();
+
+    isRecording = false;
+
+    if (path != null) {
+      widget.onStop(path);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+        child: InkWell(
+      child: SizedBox(width: 56, height: 56, child: icon),
+      onTap: () {
+        debugPrint("Record button tap: $isRecording");
+        isRecording ? _stop() : _start();
+      },
+    ));
+  }
+
+  Icon get icon {
+    if (isRecording) {
+      return const Icon(Icons.stop, color: Colors.red, size: 30);
+    }
+    return const Icon(Icons.mic, color: Colors.blue, size: 30);
+  }
+
+  @override
+  void dispose() {
+    _audioRecorder.dispose();
+    super.dispose();
   }
 }

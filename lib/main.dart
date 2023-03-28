@@ -8,16 +8,17 @@ import 'presentation/ui/home.dart';
 
 import 'env/env.dart';
 
-void main() { 
-  // Set the OpenAI API key from the .env file.
+void main() {
+  /// Set the OpenAI API key from the .env file.
   ApiService.api.token = Env.apiKey;
+
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  static const String eventName = "Flutter + ChatGPT - Flutter Faro #3";
+  static const String eventName = "Flutter + ChatGPT - Flutter Faro #3 #4";
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const ChatView(),
+        home: const HomePage(title: eventName),
       ),
     );
   }

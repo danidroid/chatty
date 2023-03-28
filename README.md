@@ -1,22 +1,27 @@
 # chatty
 
-A ChatGPT demo API
+A ChatGPT demo using API
 
 ## Context
 
-This demo was created to be used in the Flutter Faro event #3
+This demo was created to be used in the Flutter Faro event #3 and #4
+
+- [Event #3](https://www.meetup.com/flutter-faro/events/291516827/)
+- [Event #4](https://www.meetup.com/flutter-faro/events/292386880/)
 
 ### Features
 
-[x] Base app structure
-[x] Connect to Api to query text or images
-[x] Simple Chat UI
-[ ] Proper error handling
-[ ] Improve and clean Models structure
-[ ] Improve chat UI for text and image prompts
-[ ] Add support to save conversation
-[ ] Add Settings to configure the SecretKey
-[ ] Add tests
+- [x] Base app structure
+- [x] Connect Api to use [Completions](https://platform.openai.com/docs/api-reference/completions)
+- [x] Connect Api to use [Images](https://platform.openai.com/docs/api-reference/images)
+- [x] Connect Api to use [Audio](https://platform.openai.com/docs/api-reference/audio)
+- [x] Simple Chat UI
+- [ ] Proper error handling
+- [ ] Improve and clean Models structure
+- [ ] Improve chat UI for text and image prompts
+- [ ] Add support to save conversation
+- [x] Add Settings to configure the SecretKey
+- [ ] Add tests
 
 ## Getting Started
 

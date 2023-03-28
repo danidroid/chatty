@@ -1,16 +1,18 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/foundation.dart';
+
+import 'package:chatty/audio_recorder.dart';
+import 'package:chatty/env/env.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:chatty/audio_recorder.dart';
-
-import 'package:chatty/env/env.dart';
 
 import '../notifiers/timer_notifier.dart';
+
+enum RequestType { text, image, audio }
 
 class ChatView extends StatefulWidget {
   const ChatView({super.key});
@@ -40,7 +42,7 @@ class _ChatViewState extends State<ChatView> {
         bottom: false,
         child: Column(
           children: [
-            Container(
+            /*Container(
               color: Colors.blue.shade100,
               height: 100,
               child: Row(
@@ -65,17 +67,9 @@ class _ChatViewState extends State<ChatView> {
                     onPressed: _onAudioTranscriptions,
                     icon: const Icon(Icons.audio_file_outlined)
                   ),
-                  AudioRecorder(
-                    onStop: (path) {
-                      debugPrint('Recorded file path: $path');
-                      setState(() {
-                        audioPath = path;
-                      });
-                    },
-                  )
                 ],
               ),
-            ),
+            ),*/
             Expanded(
               child: ListView.builder(
                   itemCount: _messages.length,
@@ -98,32 +92,52 @@ class _ChatViewState extends State<ChatView> {
                 padding: const EdgeInsets.all(16),
                 child: Padding(
                   padding: const EdgeInsets.only(bottom: 32),
-                  child: TextFormField(
-                      textInputAction: TextInputAction.done,
-                      cursorColor: Colors.black,
-                      decoration: const InputDecoration(
-                        label: Text("Prompt?"),
-                        labelStyle: TextStyle(color: Colors.black),
-                        border: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                          ),
-                        ),
-                        enabledBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                          ),
-                        ),
-                        focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(
-                            color: Colors.black,
-                          ),
-                        ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                            textInputAction: TextInputAction.done,
+                            cursorColor: Colors.black,
+                            decoration: const InputDecoration(
+                              label: Text("Prompt?"),
+                              labelStyle: TextStyle(color: Colors.black),
+                              border: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              enabledBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              focusedBorder: UnderlineInputBorder(
+                                borderSide: BorderSide(
+                                  color: Colors.black,
+                                ),
+                              ),
+                              //suffix: IconButton(icon: Icon(Icons.play_arrow_rounded), onPressed: onSubmit)
+                            ),
+                            onFieldSubmitted: (value) {
+                              debugPrint("Value: $value");
+                              requestText(prompt: value);
+                            }),
                       ),
-                      onFieldSubmitted: (value) {
-                        debugPrint("Value: $value");
-                        request(prompt: value);
-                      }),
+
+                      /// For event #4
+                      /// Added the [AudioRecorder] widget
+                      AudioRecorder(
+                        onStop: (path) {
+                          debugPrint('Recorded file path: $path');
+                          setState(() {
+                            audioPath = path;
+                          });
+
+                          requestAudio(prompt: audioPath!);
+                        },
+                      )
+                    ],
+                  ),
                 ))
           ],
         ),
@@ -131,7 +145,7 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  void request({required String prompt}) async {
+  void requestText({required String prompt}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
@@ -141,51 +155,110 @@ class _ChatViewState extends State<ChatView> {
     final headers = <String, Object>{};
     headers[HttpHeaders.authorizationHeader] = "Bearer $token";
     headers[HttpHeaders.acceptHeader] = 'application/json';
-    //headers[HttpHeaders.contentTypeHeader] = 'application/json';
-    headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
+    headers[HttpHeaders.contentTypeHeader] = 'application/json';
 
     client.options.headers.addAll(headers);
 
     debugPrint(client.options.headers.toString());
 
-    /*var response = await client.post("completions", data: {
+    var response = await client.post("completions", data: {
       "model": "text-davinci-003",
       "prompt": prompt,
       "max_tokens": 1500,
       "stop": ["You:"]
-    });*/
+    });
     /*var response = await client.post("images/generations", data: {
       "prompt": prompt,
       "n": 1,
       "response_format": "b64_json"
     });*/
 
-    // ByteData a = await rootBundle.load("/tmp/file.m4a");
-    //Uint8List audioUint8List = a.buffer.asUint8List(a.offsetInBytes, a.lengthInBytes);
-    //List<int> audioListInt = audioUint8List.cast<int>();
+    debugPrint("response: $response");
 
-    File? file;
-    try {
-      file = File.fromUri(Uri.file("/tmp/file.m4a")); // <= returns File
-    } catch (e) {
-      // catch errors here
+    var json = response.data as Map<String, dynamic>;
+    var message = json["choices"][0]["text"];
+    //var message = json["data"][0]["b64_json"];
+    //print("message: $message");
+
+    setState(() {
+      _messages.add(message);
+    });
+  }
+
+  void requestImage({required String prompt}) async {
+    Dio client = Dio();
+    client.options.baseUrl = "https://api.openai.com/v1/";
+
+    /// Set API token
+    String token = Env.apiKey;
+
+    final headers = <String, Object>{};
+    headers[HttpHeaders.authorizationHeader] = "Bearer $token";
+    headers[HttpHeaders.acceptHeader] = 'application/json';
+    headers[HttpHeaders.contentTypeHeader] = 'application/json';
+
+    client.options.headers.addAll(headers);
+
+    debugPrint(client.options.headers.toString());
+
+    var response = await client.post("images/generations",
+        data: {"prompt": prompt, "n": 1, "response_format": "b64_json"});
+    debugPrint("response: $response");
+
+    var json = response.data as Map<String, dynamic>;
+    var message = json["data"][0]["b64_json"];
+
+    setState(() {
+      _messages.add(message);
+    });
+  }
+
+  /// for whisper
+  void requestAudio({required String prompt}) async {
+    Dio client = Dio();
+    client.options.baseUrl = "https://api.openai.com/v1/";
+
+    /// Set API token
+    String token = Env.apiKey;
+    print("token: $token");
+
+    final headers = <String, Object>{};
+    headers[HttpHeaders.authorizationHeader] = "Bearer $token";
+    headers[HttpHeaders.acceptHeader] = 'application/json';
+    headers[HttpHeaders.contentTypeHeader] = 'multipart/form-data';
+
+    client.options.headers.addAll(headers);
+
+    MultipartFile multipartFile;
+
+    /// for web we'll need to send it as bytes
+    if (kIsWeb) {
+      /// first get the blob path and parse it
+      final result = await http.get(Uri.parse(prompt));
+
+      /// then convert to bytes
+      Uint8List data = result.bodyBytes.buffer.asUint8List();
+
+      multipartFile = MultipartFile.fromBytes(data, filename: "audio.m4a");
+    } else {
+      File? file;
+      try {
+        file = File.fromUri(Uri.file(prompt)); // <= returns File
+      } catch (e) {
+        print("eee: $e");
+      }
+      multipartFile =
+          await MultipartFile.fromFile(file!.path, filename: "file_01.m4a");
     }
 
     /// for whisper
-    FormData formData = FormData.fromMap({
-      "model": "whisper-1",
-      "file": await MultipartFile.fromFile(file!.path, filename: "file_01.mp3")
-    });
+    FormData formData =
+        FormData.fromMap({"model": "whisper-1", "file": multipartFile});
     var response = await client.post("audio/transcriptions", data: formData);
 
     debugPrint("response: $response");
 
     var json = response.data as Map<String, dynamic>;
-    //var message = json["choices"][0]["text"];
-    //var message = json["data"][0]["b64_json"];
-    //print("message: $message");
-
-    /// for whisper
     final String text = json["text"];
 
     setState(() {
@@ -202,10 +275,6 @@ class _ChatViewState extends State<ChatView> {
     _timer.init(
       duration: 1000,
     );
-  }
-
-  void _onAudioTranscriptions() {
-    request(prompt: "");
   }
 
   Future<File> writeToFile(ByteData data) async {
