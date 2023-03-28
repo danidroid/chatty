@@ -268,7 +268,7 @@ class _ChatViewState extends State<ChatView> {
 
     var s = await requestText(prompt: text);
 
-    if (getResponse!) {
+    if (getResponse) {
       FlutterTts flutterTts = FlutterTts();
       await flutterTts.setLanguage("en-GB");
       await flutterTts.setPitch(0.8);
