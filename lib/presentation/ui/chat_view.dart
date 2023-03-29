@@ -262,20 +262,21 @@ class _ChatViewState extends State<ChatView> {
     var json = response.data as Map<String, dynamic>;
     final String prompt = json["text"];
 
+    setState(() {
+      _messages.add(prompt);
+    });
+
     // Flutter tts
     debugPrint("requestFromAudio (prompt): $prompt");
     var text = await requestText(prompt: prompt);
 
     if (speakResponse) {
       FlutterTts flutterTts = FlutterTts();
-      await flutterTts.setLanguage("en-GB");
+      await flutterTts.setLanguage("en-US");
       await flutterTts.setPitch(0.8);
       await flutterTts.speak(text);
     }
-    setState(() {
-      _messages.add(prompt);
-      _messages.add(text);
-    });
+
   }
 
   void _onStart() {
