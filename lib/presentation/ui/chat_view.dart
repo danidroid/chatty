@@ -134,7 +134,7 @@ class _ChatViewState extends State<ChatView> {
                             audioPath = path;
                           });
 
-                          requestAudio(prompt: audioPath!, getResponse: true);
+                          requestFromAudio(audioPath: audioPath!, speakResponse: true);
                         },
                       )
                     ],
@@ -217,7 +217,7 @@ class _ChatViewState extends State<ChatView> {
   }
 
   /// for whisper
-  void requestAudio({required String prompt, bool getResponse = false}) async {
+  void requestFromAudio({required String audioPath, bool speakResponse = false}) async {
     Dio client = Dio();
     client.options.baseUrl = "https://api.openai.com/v1/";
 
@@ -237,7 +237,7 @@ class _ChatViewState extends State<ChatView> {
     /// for web we'll need to send it as bytes
     if (kIsWeb) {
       /// first get the blob path and parse it
-      final result = await http.get(Uri.parse(prompt));
+      final result = await http.get(Uri.parse(audioPath));
 
       /// then convert to bytes
       Uint8List data = result.bodyBytes.buffer.asUint8List();
@@ -246,41 +246,37 @@ class _ChatViewState extends State<ChatView> {
     } else {
       File? file;
       try {
-        file = File.fromUri(Uri.file(prompt)); // <= returns File
+        file = File.fromUri(Uri.file(audioPath)); // <= returns File
       } catch (e) {
         print("eee: $e");
       }
-      multipartFile =
-          await MultipartFile.fromFile(file!.path, filename: "file_01.m4a");
+      multipartFile = await MultipartFile.fromFile(file!.path, filename: "file_01.m4a");
     }
 
     /// for whisper
-    FormData formData =
-        FormData.fromMap({"model": "whisper-1", "file": multipartFile});
+    FormData formData = FormData.fromMap({"model": "whisper-1", "file": multipartFile});
     var response = await client.post("audio/transcriptions", data: formData);
 
     debugPrint("whisper parse: $response");
 
     var json = response.data as Map<String, dynamic>;
-    final String text = json["text"];
+    final String prompt = json["text"];
+
+    setState(() {
+      _messages.add(prompt);
+    });
 
     // Flutter tts
+    debugPrint("requestFromAudio (prompt): $prompt");
+    var text = await requestText(prompt: prompt);
 
-    var s = await requestText(prompt: text);
-
-    if (getResponse) {
+    if (speakResponse) {
       FlutterTts flutterTts = FlutterTts();
-      await flutterTts.setLanguage("en-GB");
+      await flutterTts.setLanguage("en-US");
       await flutterTts.setPitch(0.8);
-      await flutterTts.speak(s);
-      setState(() {
-        _messages.add(s);
-      });
-    } else {
-      setState(() {
-        _messages.add(text);
-      });
+      await flutterTts.speak(text);
     }
+
   }
 
   void _onStart() {
