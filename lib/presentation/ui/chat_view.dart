@@ -78,9 +78,13 @@ class _ChatViewState extends State<ChatView> {
                     String item = _messages.elementAt(index);
 
                     return Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(8),
                       color: Colors.blue.shade200,
-                      child: Text(item),
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        color: index.isOdd ? Colors.blue.shade200 : Colors.blue.shade100,
+                        child: Text(item)
+                      ),
                       /*child: Image.memory(
                         const Base64Decoder().convert(item.split(',').last),
                         gaplessPlayback: true,
@@ -121,6 +125,9 @@ class _ChatViewState extends State<ChatView> {
                             ),
                             onFieldSubmitted: (value) {
                               debugPrint("Value: $value");
+                              setState(() {
+                                _messages.add(value);
+                              });
                               requestText(prompt: value);
                             }),
                       ),
